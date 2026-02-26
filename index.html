@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atendimento via WhatsApp</title>
+    
+    <!-- Tailwind CSS para estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome para o ícone do WhatsApp -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Configuração de cores personalizadas no Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        whatsapp: {
+                            DEFAULT: '#25D366',
+                            dark: '#128C7E',
+                            light: '#DCF8C6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Animação de pulso para o ícone */s222
+        @keyframes pulse-soft {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .animate-pulse-soft {
+            animation: pulse-soft 2s infinite ease-in-out;
+        }
+
+        /* Animação de carregamento circular */
+        .loader {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #25D366;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4 font-sans text-gray-800">
+
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 text-center border border-gray-100 transition-all">
+        
+        <!-- Ícone do WhatsApp -->
+        <div class="w-24 h-24 bg-whatsapp-light rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-soft">
+            <i class="fa-brands fa-whatsapp text-whatsapp text-5xl"></i>
+        </div>
+
+        <!-- Textos Principais -->
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Quase lá!</h1>
+        <p class="text-gray-600 mb-6 leading-relaxed">
+            Estamos a transferir-te para o nosso atendimento seguro no WhatsApp.
+        </p>
+
+        <!-- Área de Status / Redirecionamento -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-6 border border-gray-100 flex items-center justify-center text-sm font-medium text-gray-700">
+            <div class="loader"></div>
+            <span id="status-text">A redirecionar...</span>
+        </div>
+
+        <!-- Botão de Ação Manual (Fallback) -->
+        <a id="whatsapp-link" href="#" class="block w-full bg-whatsapp hover:bg-whatsapp-dark text-white font-bold py-3 px-4 rounded-xl transition-colors duration-200 shadow-lg shadow-whatsapp/30 flex items-center justify-center gap-2">
+            <span>Ir para o WhatsApp agora</span>
+            <i class="fa-solid fa-arrow-right text-sm"></i>
+        </a>
+        
+        <!-- Texto de Segurança -->
+        <p class="text-xs text-gray-400 mt-6 flex items-center justify-center gap-1">
+            <i class="fa-solid fa-lock text-gray-300"></i> Ambiente 100% seguro
+        </p>
+
+    </div>
+
+    <script>
+        // Configurações
+        const numeroWhatsApp = "13981778003"; // O número fornecido
+        
+        // Array com as frases prontas
+        const frasesProntas = [
+            "Oi, quero saber mais sobre os conteudos?",
+            "Oie, quero saber mais!",
+            "Quero saber mais!",
+            "Ta online?"
+        ];
+
+        // Escolhe uma frase aleatória da lista
+        const fraseEscolhida = frasesProntas[Math.floor(Math.random() * frasesProntas.length)];
+        const mensagem = encodeURIComponent(fraseEscolhida);
+        
+        // Monta o link final com a mensagem
+        const urlDestino = `https://wa.me/${numeroWhatsApp}?text=${mensagem}`;
+
+        const linkElement = document.getElementById('whatsapp-link');
+
+        // Garante que o botão tenha o link correto caso o JS falhe no redirect automático
+        linkElement.href = urlDestino;
+
+        // Redirecionamento quase instantâneo (800ms para permitir que a página carregue e evite bloqueios)
+        setTimeout(() => {
+            const statusText = document.getElementById('status-text');
+            if(statusText) {
+                statusText.classList.add('text-whatsapp', 'font-bold');
+            }
+            
+            // Realiza o redirecionamento
+            window.location.href = urlDestino;
+        }, 800); // 800 milissegundos
+    </script>
+</body>
+</html>
